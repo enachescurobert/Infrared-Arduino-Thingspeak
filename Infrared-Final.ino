@@ -8,12 +8,19 @@ int val1 = 0;
 int val2 = 0;
 int val3 = 0;
 
+int stareLoc1 = 0;
+int stareLoc2 = 0;
+int stareLoc3 = 0;
+
 String apiWritekey = "IH94122DLUH2Z89Q"; // replace with your THINGSPEAK WRITEAPI key here
 const char* ssid = "Robertica"; // your wifi SSID name
 const char* password = "Robu~!@#$%^&*()" ;// wifi pasword
 //const char* ssid = "Beinur"; // your wifi SSID name
 //const char* password = "Legion96" ;// wifi pasword
 const char* server = "api.thingspeak.com";
+
+// https://api.thingspeak.com/update?api_key=IH94122DLUH2Z89Q&field1=0&field2=0&field3=0
+
 WiFiClient client;
 
 
@@ -47,122 +54,36 @@ void setup(){
 void loop()
 {
   val1 = digitalRead(senzor1);
+  val2 = digitalRead(senzor2);
+  val3 = digitalRead(senzor3);
 
   if (val1 == HIGH){
-    
-   
-   client.connect(server,80);
-   String tsData = apiWritekey;
-           tsData +="&field1=";
-           tsData += String(0);
-           tsData += "\r\n\r\n";
-
-     client.print("POST /update HTTP/1.1\n");
-     client.print("Host: api.thingspeak.com\n");
-     client.print("Connection: close\n");
-     client.print("X-THINGSPEAKAPIKEY: "+apiWritekey+"\n");
-     client.print("Content-Type: application/x-www-form-urlencoded\n");
-     client.print("Content-Length: ");
-     client.print(tsData.length());
-     client.print("\n\n");  // the 2 carriage returns indicate closing of Header fields & starting of data
-     client.print(tsData);
- 
-     Serial.print("Field 1:");
-     Serial.print(" 0 \n");
-     Serial.println("uploaded to Thingspeak server....");
-
-       delay(15000);
-
-           
-   
-  } else if(val1 == LOW){
-    client.connect(server,80);
-   String tsData = apiWritekey;
-           tsData +="&field1=";
-           tsData += String(1);
-           tsData += "\r\n\r\n";
-
-     client.print("POST /update HTTP/1.1\n");
-     client.print("Host: api.thingspeak.com\n");
-     client.print("Connection: close\n");
-     client.print("X-THINGSPEAKAPIKEY: "+apiWritekey+"\n");
-     client.print("Content-Type: application/x-www-form-urlencoded\n");
-     client.print("Content-Length: ");
-     client.print(tsData.length());
-     client.print("\n\n");  // the 2 carriage returns indicate closing of Header fields & starting of data
-     client.print(tsData);
- 
-     Serial.print("Field 1:");
-     Serial.print(" 1 \n");
-     Serial.println("uploaded to Thingspeak server....");
-
-       delay(15000);
-
+    stareLoc1 = 0;
+  } else {
+    stareLoc1 = 1;
   }
-
-  val2 = digitalRead(senzor2);
 
   if (val2 == HIGH){
-    
-   
-   client.connect(server,80);
-   String tsData = apiWritekey;
-           tsData +="&field2=";
-           tsData += String(0);
-           tsData += "\r\n\r\n";
-
-     client.print("POST /update HTTP/1.1\n");
-     client.print("Host: api.thingspeak.com\n");
-     client.print("Connection: close\n");
-     client.print("X-THINGSPEAKAPIKEY: "+apiWritekey+"\n");
-     client.print("Content-Type: application/x-www-form-urlencoded\n");
-     client.print("Content-Length: ");
-     client.print(tsData.length());
-     client.print("\n\n");  // the 2 carriage returns indicate closing of Header fields & starting of data
-     client.print(tsData);
- 
-     Serial.print("Field 2:");
-     Serial.print(" 0 \n");
-     Serial.println("uploaded to Thingspeak server....");
-
-       delay(15000);
-
-           
-   
-  } else if(val2 == LOW){
-    client.connect(server,80);
-   String tsData = apiWritekey;
-           tsData +="&field2=";
-           tsData += String(1);
-           tsData += "\r\n\r\n";
-
-     client.print("POST /update HTTP/1.1\n");
-     client.print("Host: api.thingspeak.com\n");
-     client.print("Connection: close\n");
-     client.print("X-THINGSPEAKAPIKEY: "+apiWritekey+"\n");
-     client.print("Content-Type: application/x-www-form-urlencoded\n");
-     client.print("Content-Length: ");
-     client.print(tsData.length());
-     client.print("\n\n");  // the 2 carriage returns indicate closing of Header fields & starting of data
-     client.print(tsData);
- 
-     Serial.print("Field 2:");
-     Serial.print(" 1 \n");
-     Serial.println("uploaded to Thingspeak server....");
-
-       delay(15000);
-
+    stareLoc2 = 0;
+  } else {
+    stareLoc2 = 1;
   }
 
-  val3 = digitalRead(senzor3);
-  
   if (val3 == HIGH){
+    stareLoc3 = 0;
+  } else {
+    stareLoc3 = 1;
+  }
     
    
    client.connect(server,80);
    String tsData = apiWritekey;
+           tsData +="&field1=";
+           tsData += String(stareLoc1);
+           tsData +="&field2=";
+           tsData += String(stareLoc2);
            tsData +="&field3=";
-           tsData += String(0);
+           tsData += String(stareLoc3);
            tsData += "\r\n\r\n";
 
      client.print("POST /update HTTP/1.1\n");
@@ -175,42 +96,17 @@ void loop()
      client.print("\n\n");  // the 2 carriage returns indicate closing of Header fields & starting of data
      client.print(tsData);
  
+     Serial.print("Field 1:");
+     Serial.print(stareLoc1);
+     Serial.print(" \n");
+     Serial.print("Field 2:");
+     Serial.print(stareLoc2);
+     Serial.print(" \n");
      Serial.print("Field 3:");
-     Serial.print(" 0 \n");
+     Serial.print(stareLoc3);
+     Serial.print(" \n");
      Serial.println("uploaded to Thingspeak server....");
 
-       delay(15000);
-
-           
-   
-  } else if(val3 == LOW){
-    client.connect(server,80);
-   String tsData = apiWritekey;
-           tsData +="&field3=";
-           tsData += String(1);
-           tsData += "\r\n\r\n";
-
-     client.print("POST /update HTTP/1.1\n");
-     client.print("Host: api.thingspeak.com\n");
-     client.print("Connection: close\n");
-     client.print("X-THINGSPEAKAPIKEY: "+apiWritekey+"\n");
-     client.print("Content-Type: application/x-www-form-urlencoded\n");
-     client.print("Content-Length: ");
-     client.print(tsData.length());
-     client.print("\n\n");  // the 2 carriage returns indicate closing of Header fields & starting of data
-     client.print(tsData);
- 
-     Serial.print("Field 3:");
-     Serial.print(" 1 \n");
-     Serial.println("uploaded to Thingspeak server....");
-
-       delay(15000);
-
-  }
-
-  
-  
-  
   client.stop();
   Serial.println("Waiting to upload next reading...");
   Serial.println();
